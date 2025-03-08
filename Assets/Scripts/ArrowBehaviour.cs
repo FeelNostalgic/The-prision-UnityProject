@@ -1,23 +1,22 @@
-using System;
 using System.Collections.Generic;
-using System.Threading;
 using DG.Tweening;
 using Proyecto.Controller;
 using Proyecto.IA;
 using Proyecto.Manager;
 using Proyecto.Utilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Proyecto.Behaviour
 {
-    public class FlechaBehaviour : Singlenton<FlechaBehaviour>
+    public class ArrowBehaviour : Singlenton<ArrowBehaviour>
     {
         #region Inspector Variables
 
         [SerializeField] private float SpinDuration;
 
-        [SerializeField] private List<GameObject> JaulasList;
+        [FormerlySerializedAs("JaulasList")] [SerializeField] private List<GameObject> JailsList;
 
         #endregion
 
@@ -32,7 +31,7 @@ namespace Proyecto.Behaviour
         private int _currentNPCs;
         private float _pieceAngle;
         private float _halfPieceAngle;
-        private int _indice;
+        private int _index;
 
         #endregion
 
@@ -54,23 +53,23 @@ namespace Proyecto.Behaviour
             SpinIsCompleted = false;
             var NPC = GetIndexOfSpin();
 
-            float targetAngle = _indice * _pieceAngle;
-            float rightOffset = (targetAngle + _halfPieceAngle) % 360;
-            float leftOffset = (targetAngle - _halfPieceAngle) % 360;
+            var targetAngle = _index * _pieceAngle;
+            var rightOffset = (targetAngle + _halfPieceAngle) % 360;
+            var leftOffset = (targetAngle - _halfPieceAngle) % 360;
 
-            float randomAngle = Random.Range(leftOffset, rightOffset);
+            var randomAngle = Random.Range(leftOffset, rightOffset);
 
-            Vector3 targetRotation = Vector3.up * (randomAngle + 1 * 360 * SpinDuration);
+            var targetRotation = Vector3.up * (randomAngle + 1 * 360 * SpinDuration);
 
             float prevAngle, currentAngle;
             prevAngle = currentAngle = transform.rotation.eulerAngles.y;
 
-            bool isIndicatorOnTheLine = false;
+            var isIndicatorOnTheLine = false;
 
             transform.DORotate(targetRotation, SpinDuration, RotateMode.FastBeyond360).SetEase(Ease.InOutQuart)
                 .OnUpdate(() =>
                 {
-                    float diff = Mathf.Abs(prevAngle - currentAngle);
+                    var diff = Mathf.Abs(prevAngle - currentAngle);
                     if (diff >= _halfPieceAngle) //Suena cuando la flecha apunta a una jaula
                     {
                         if (isIndicatorOnTheLine)
@@ -86,7 +85,7 @@ namespace Proyecto.Behaviour
                 })
                 .OnComplete(() =>
                 {
-                    Debug.Log(_indice + ": Completed");
+                    Debug.Log(_index + ": Completed");
                     if(NPC != null) JailDown(NPC);
                     else JailDown();
                 })
@@ -101,20 +100,20 @@ namespace Proyecto.Behaviour
             if (_currentNPCs < 7)
             {
                 var target = SetupManager.Instance.GetNextNPC();
-                _indice = target.Indice;
+                _index = target.Indice;
                 _currentNPCs++;
                 return target;
             }
             else
             {
-                _indice = SetupManager.Instance.PlayerIndex;
+                _index = SetupManager.Instance.PlayerIndex;
                 return null;
             }
         }
         
         private void JailDown(NPC_Position npc = null)
         {
-            JaulasList[_indice].transform
+            JailsList[_index].transform
                 .DOMoveY(-2.55f, AudioManager.Instance.getClipDuration(AudioManager.SFX_Type.hidraulicSound))
                 .OnComplete(() =>
                 {

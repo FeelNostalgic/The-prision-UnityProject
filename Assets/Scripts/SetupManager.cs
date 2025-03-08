@@ -95,8 +95,8 @@ namespace Proyecto.Manager
             for (int i = 0; i < 8; i++)
             {
                 yield return new WaitForSeconds(Random.Range(3, 5));
-                FlechaBehaviour.Instance.Spin();
-                yield return new WaitWhile(() => !FlechaBehaviour.Instance.SpinIsCompleted);
+                ArrowBehaviour.Instance.Spin();
+                yield return new WaitWhile(() => !ArrowBehaviour.Instance.SpinIsCompleted);
             }
         }
         
