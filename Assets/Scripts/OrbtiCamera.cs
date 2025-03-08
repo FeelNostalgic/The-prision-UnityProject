@@ -4,13 +4,13 @@ using Cinemachine;
 
 public class OrbitCamera : MonoBehaviour
 {
-    private Camera _Camera;
+    private Camera _camera;
     [SerializeField] private Transform target;
     [SerializeField] [Range(0,50f)] private float rotationSpeed = 10f;
 
     private void Start()
     {
-        _Camera = GetComponent<Camera>();
+        _camera = GetComponent<Camera>();
     }
 
     private void Update()

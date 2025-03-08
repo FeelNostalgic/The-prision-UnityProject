@@ -1,4 +1,5 @@
 using System;
+using Manager;
 using Proyecto.Utilities;
 using UnityEngine;
 
@@ -45,31 +46,28 @@ namespace Proyecto.Controller
 
         private void Update()
         {
+            if(UIManager.Instance.Paused) return;
             calculateRotation();
             calculateMove();
         }
 
         #endregion
-
-        #region Public Methods
-
-        #endregion
-
+        
         #region Private Methods
         
         private void calculateRotation()
         {
             _RotationY += -Input.GetAxis("Mouse Y") * RotationSpeed;
-            float rotationX = Input.GetAxis("Mouse X") * RotationSpeed;
+            var rotationX = Input.GetAxis("Mouse X") * RotationSpeed;
             _RotationY = Mathf.Clamp(_RotationY, -LimitRotation, LimitRotation);
-            UnityEngine.Camera.main.transform.localRotation = Quaternion.Euler(_RotationY, 0, 0);
+            Camera.main.transform.localRotation = Quaternion.Euler(_RotationY, 0, 0);
             transform.rotation *= Quaternion.Euler(0, rotationX, 0);
         }
 
         private void calculateMove()
         {
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
+            var h = Input.GetAxis("Horizontal");
+            var v = Input.GetAxis("Vertical");
 
             transform.position += transform.forward * (v * MoveSpeed * Time.deltaTime);
             transform.position += Quaternion.AngleAxis(90, Vector3.up) * transform.forward *
@@ -88,8 +86,8 @@ namespace Proyecto.Controller
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("KillZone"))
-            {
-                Application.Quit();
+            { 
+                UIManager.Instance.ShowEndPanel();
             }
         }
     }

@@ -14,9 +14,9 @@ namespace Proyecto.Behaviour
     {
         #region Inspector Variables
 
-        [SerializeField] private float SpinDuration;
+        [FormerlySerializedAs("SpinDuration")] [SerializeField] private float spinDuration;
 
-        [FormerlySerializedAs("JaulasList")] [SerializeField] private List<GameObject> JailsList;
+        [FormerlySerializedAs("JailsList")] [SerializeField] private List<GameObject> jailsList;
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace Proyecto.Behaviour
         public void Spin()
         {
             SpinIsCompleted = false;
-            var NPC = GetIndexOfSpin();
+            var npc = GetIndexOfSpin();
 
             var targetAngle = _index * _pieceAngle;
             var rightOffset = (targetAngle + _halfPieceAngle) % 360;
@@ -59,18 +59,18 @@ namespace Proyecto.Behaviour
 
             var randomAngle = Random.Range(leftOffset, rightOffset);
 
-            var targetRotation = Vector3.up * (randomAngle + 1 * 360 * SpinDuration);
+            var targetRotation = Vector3.up * (randomAngle + 1 * 360 * spinDuration);
 
             float prevAngle, currentAngle;
             prevAngle = currentAngle = transform.rotation.eulerAngles.y;
 
             var isIndicatorOnTheLine = false;
 
-            transform.DORotate(targetRotation, SpinDuration, RotateMode.FastBeyond360).SetEase(Ease.InOutQuart)
+            transform.DORotate(targetRotation, spinDuration, RotateMode.FastBeyond360).SetEase(Ease.InOutQuart)
                 .OnUpdate(() =>
                 {
                     var diff = Mathf.Abs(prevAngle - currentAngle);
-                    if (diff >= _halfPieceAngle) //Suena cuando la flecha apunta a una jaula
+                    if (diff >= _halfPieceAngle) //Sound when arrow points to a jail 
                     {
                         if (isIndicatorOnTheLine)
                         {
@@ -86,7 +86,7 @@ namespace Proyecto.Behaviour
                 .OnComplete(() =>
                 {
                     Debug.Log(_index + ": Completed");
-                    if(NPC != null) JailDown(NPC);
+                    if(npc != null) JailDown(npc);
                     else JailDown();
                 })
                 .Play();
@@ -113,7 +113,7 @@ namespace Proyecto.Behaviour
         
         private void JailDown(NPC_Position npc = null)
         {
-            JailsList[_index].transform
+            jailsList[_index].transform
                 .DOMoveY(-2.55f, AudioManager.Instance.getClipDuration(AudioManager.SFX_Type.hidraulicSound))
                 .OnComplete(() =>
                 {

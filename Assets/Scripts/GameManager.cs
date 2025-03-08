@@ -9,7 +9,6 @@ namespace Manager
 
         [SerializeField] private GameObject controlsPanel;
         
-        
         #endregion
 
         #region Public Variables
@@ -44,6 +43,11 @@ namespace Manager
         public void HideControls()
         {
             controlsPanel.SetActive(false);
+        }
+
+        public void ExitToMainMenu()
+        {
+            MySceneManager.LoadScene(MySceneManager.Scenes.MainMenu);
         }
 
         public void ExitGame()
