@@ -1,0 +1,40 @@
+{
+    "items": [
+        {
+            "Name": "UI",
+            "TextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "FontSize": 12,
+            "FontStyle": 0,
+            "ImageColor": {
+                "r": 0.24056601524353028,
+                "g": 1.0,
+                "b": 0.6890475153923035,
+                "a": 1.0
+            },
+            "ImageType": 0
+        },
+        {
+            "Name": "Enviroment",
+            "TextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "FontSize": 12,
+            "FontStyle": 0,
+            "ImageColor": {
+                "r": 1.0,
+                "g": 0.7637647390365601,
+                "b": 0.3820754885673523,
+                "a": 1.0
+            },
+            "ImageType": 0
+        }
+    ]
+}

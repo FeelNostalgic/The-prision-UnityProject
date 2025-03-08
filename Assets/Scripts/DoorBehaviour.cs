@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Manager;
 using Proyecto.Manager;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace Proyecto.Behaviour
                         1)
                     .SetEase(Ease.Linear));
 
-            sq.Play().OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.doorSoundOpen));
+            sq.Play().OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.DoorSoundOpen));
         }
 
         private void OnTriggerExit(Collider other)
@@ -37,7 +38,7 @@ namespace Proyecto.Behaviour
                         1)
                     .SetEase(Ease.Linear));
 
-            sq.Play().OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.doorSoundClose));
+            sq.Play().OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.DoorSoundClose));
 
         }
     }

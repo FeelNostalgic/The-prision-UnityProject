@@ -1,17 +1,20 @@
+using System;
 using Proyecto.Utilities;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
-namespace Proyecto.Manager
+namespace Manager
 {
     public class AudioManager : Singlenton<AudioManager>
     {
         #region Inspector Variables
-        
-        [SerializeField] private AudioSource MainAudioSource;
-        [SerializeField] private AudioSource SfxAudioSource;
-        [SerializeField] private AudioSource SfxDoorAudioSource;
 
-        [SerializeField] private AudioClip[] SFXClips;
+        [FormerlySerializedAs("MainAudioSource")] [SerializeField] private AudioSource mainAudioSource;
+        [FormerlySerializedAs("SfxAudioSource")] [SerializeField] private AudioSource sfxAudioSource;
+        [FormerlySerializedAs("SfxDoorAudioSource")] [SerializeField] private AudioSource sfxDoorAudioSource;
+
+        [FormerlySerializedAs("SFXClips")] [SerializeField] private AudioClip[] sfxClips;
 
         #endregion
 
@@ -19,72 +22,78 @@ namespace Proyecto.Manager
 
         public enum SFX_Type
         {
-            tickSound, hidraulicSound, doorSoundOpen, doorSoundClose
+            TickSound,
+            HydraulicSound,
+            DoorSoundOpen,
+            DoorSoundClose,
+            ClickSound
         }
-        #endregion
-
-        #region Private Variables
 
         #endregion
-
-        #region Unity Methods
-
-        #endregion  
 
         #region Public Methods
 
+        public void StartMusic()
+        {
+            mainAudioSource.Play();
+        }
+        
         public void PlayClip(SFX_Type type)
         {
             switch (type)
             {
-                case SFX_Type.tickSound:
-                    SfxAudioSource.pitch = Random.Range(1, 1.5f);
-                    PlaySFXClip((int) type);
+                case SFX_Type.TickSound:
+                case SFX_Type.HydraulicSound:
+                    sfxAudioSource.pitch = Random.Range(1, 1.5f);
+                    PlaySFXClip((int)type);
                     break;
-                case SFX_Type.hidraulicSound:
-                    SfxAudioSource.pitch = Random.Range(1, 1.5f);
-                    PlaySFXClip((int) type);
+                case SFX_Type.DoorSoundOpen:
+                case SFX_Type.DoorSoundClose:
+                    sfxDoorAudioSource.Stop();
+                    sfxDoorAudioSource.pitch = Random.Range(1, 1.5f);
+                    PlaySFXClip((int)type, true);
                     break;
-                case SFX_Type.doorSoundOpen:
-                    SfxDoorAudioSource.Stop();
-                    SfxDoorAudioSource.pitch = Random.Range(1, 1.5f);
-                    PlaySFXClip((int) type, true);
+                case SFX_Type.ClickSound:
+                    sfxAudioSource.pitch = Random.Range(0.85f, 1.15f);
+                    PlaySFXClip((int)type);
                     break;
-                case SFX_Type.doorSoundClose:
-                    SfxDoorAudioSource.Stop();
-                    SfxDoorAudioSource.pitch = Random.Range(1, 1.5f);
-                    PlaySFXClip((int) type,true);
-                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
 
-        public float getClipDuration(SFX_Type type)
+        public float GetClipDuration(SFX_Type type)
         {
-            switch (type)
+            return type switch
             {
-                case SFX_Type.tickSound:
-                    return SFXClips[(int)type].length;
-                case SFX_Type.hidraulicSound:
-                    return SFXClips[(int)type].length;
-                case SFX_Type.doorSoundOpen:
-                    return SFXClips[(int)type].length;
-                case SFX_Type.doorSoundClose:
-                    return SFXClips[(int)type].length;
-            }
-
-            return 0;
+                SFX_Type.TickSound => sfxClips[(int)type].length,
+                SFX_Type.HydraulicSound => sfxClips[(int)type].length,
+                SFX_Type.DoorSoundOpen => sfxClips[(int)type].length,
+                SFX_Type.DoorSoundClose => sfxClips[(int)type].length,
+                _ => 0
+            };
         }
 
+        public void PauseClip(bool isPaused)
+        {
+            if(isPaused) mainAudioSource.Pause();
+            else mainAudioSource.UnPause();
+        }
+        
         #endregion
 
         #region Private Methods
-        private void PlaySFXClip(int clip)
+
+        private void PlaySFXClip(int clip, bool door = false)
         {
-            SfxAudioSource.PlayOneShot(SFXClips[clip]);
-        } 
-        private void PlaySFXClip(int clip, bool door)
-        {
-            SfxDoorAudioSource.PlayOneShot(SFXClips[clip]);
+            if (door)
+            {
+                sfxDoorAudioSource.PlayOneShot(sfxClips[clip]);
+            }
+            else
+            {
+                sfxAudioSource.PlayOneShot(sfxClips[clip]);
+            }
         }
         
         #endregion

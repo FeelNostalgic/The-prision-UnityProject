@@ -47,15 +47,15 @@ namespace Proyecto.Controller
         private void Update()
         {
             if(UIManager.Instance.Paused) return;
-            calculateRotation();
-            calculateMove();
+            CalculateRotation();
+            CalculateMove();
         }
 
         #endregion
         
         #region Private Methods
         
-        private void calculateRotation()
+        private void CalculateRotation()
         {
             _RotationY += -Input.GetAxis("Mouse Y") * RotationSpeed;
             var rotationX = Input.GetAxis("Mouse X") * RotationSpeed;
@@ -64,7 +64,7 @@ namespace Proyecto.Controller
             transform.rotation *= Quaternion.Euler(0, rotationX, 0);
         }
 
-        private void calculateMove()
+        private void CalculateMove()
         {
             var h = Input.GetAxis("Horizontal");
             var v = Input.GetAxis("Vertical");

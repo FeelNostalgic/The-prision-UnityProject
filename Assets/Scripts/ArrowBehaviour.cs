@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using Manager;
 using Proyecto.Controller;
 using Proyecto.IA;
 using Proyecto.Manager;
@@ -74,7 +75,7 @@ namespace Proyecto.Behaviour
                     {
                         if (isIndicatorOnTheLine)
                         {
-                            AudioManager.Instance.PlayClip(AudioManager.SFX_Type.tickSound);
+                            AudioManager.Instance.PlayClip(AudioManager.SFX_Type.TickSound);
                         }
 
                         prevAngle = currentAngle;
@@ -100,7 +101,7 @@ namespace Proyecto.Behaviour
             if (_currentNPCs < 7)
             {
                 var target = SetupManager.Instance.GetNextNPC();
-                _index = target.Indice;
+                _index = target.Index;
                 _currentNPCs++;
                 return target;
             }
@@ -114,14 +115,14 @@ namespace Proyecto.Behaviour
         private void JailDown(NPC_Position npc = null)
         {
             jailsList[_index].transform
-                .DOMoveY(-2.55f, AudioManager.Instance.getClipDuration(AudioManager.SFX_Type.hidraulicSound))
+                .DOMoveY(-2.55f, AudioManager.Instance.GetClipDuration(AudioManager.SFX_Type.HydraulicSound))
                 .OnComplete(() =>
                 {
                     SpinIsCompleted = true;
                     if (npc != null) npc.NPC.GetComponent<NPC_IA>().enabled = true;
                     else FirstPersonController.Instance.IsJaulaUp = false;
                 })
-                .OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.hidraulicSound))
+                .OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.HydraulicSound))
                 .Play();
         }
 
