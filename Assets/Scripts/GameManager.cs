@@ -24,7 +24,7 @@ namespace Manager
 
         private void Start()
         {
-            Cursor.visible = true;
+            controlsPanel.SetActive(false);
         }
 
         #endregion
@@ -33,12 +33,17 @@ namespace Manager
 
         public void StartGame()
         {
-            
+            MySceneManager.LoadScene(MySceneManager.Scenes.GameScene);
         }
 
         public void ShowControls()
         {
-            
+            controlsPanel.SetActive(true);
+        }
+
+        public void HideControls()
+        {
+            controlsPanel.SetActive(false);
         }
 
         public void ExitGame()
