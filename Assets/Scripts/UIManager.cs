@@ -83,7 +83,6 @@ namespace Manager
                     AudioManager.Instance.StopAudio();
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
-                    Time.timeScale = 0;
                     endPanel.SetActive(true);
                     GameEnded = true;
                     
