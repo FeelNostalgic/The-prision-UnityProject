@@ -1,8 +1,6 @@
-
 using DG.Tweening;
 using Manager;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Gate
 { 
@@ -20,8 +18,8 @@ namespace Gate
 		public void OpenGate()
 		{
 			var sq = DOTween.Sequence();
-			sq.Append(gatePositiveZ.transform.DOLocalMoveZ(4f, 3.5f).SetEase(Ease.Linear))
-				.Join(gateNegativeZ.transform.DOLocalMoveZ(-4f, 3.5f).SetEase(Ease.Linear))
+			sq.Append(gatePositiveZ.transform.DOLocalMoveZ(4f, 8f).SetEase(Ease.Linear))
+				.Join(gateNegativeZ.transform.DOLocalMoveZ(-4f, 8f).SetEase(Ease.Linear))
 				.OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.HydraulicSound))
 				.Play();
 		}

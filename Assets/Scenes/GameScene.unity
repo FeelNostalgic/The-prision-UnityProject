@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 1.216786, g: 1.216786, b: 0.82817906, a: 1}
+  m_AmbientSkyColor: {r: 0.7490201, g: 0.7490201, b: 0.5098043, a: 1}
   m_AmbientEquatorColor: {r: 0.47058824, g: 0.5176471, b: 0.53333336, a: 1}
   m_AmbientGroundColor: {r: 0.011764706, g: 0.010784314, b: 0.00882353, a: 1}
   m_AmbientIntensity: 1
@@ -2589,7 +2589,7 @@ MonoBehaviour:
   debugPlayer: 0
   moveSpeed: 2.5
   limitMove: 0.1
-  rotationSpeed: 4
+  rotationSpeed: 2.5
   limitRotation: 90
 --- !u!23 &911767215
 MeshRenderer:
@@ -6080,7 +6080,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.9014826, z: -0, w: -0.4328154}
   m_LocalPosition: {x: -0.2192, y: 0, z: 1.4901}
-  m_LocalScale: {x: 0.3, y: 0.4, z: 0.8}
+  m_LocalScale: {x: 0.3, y: 0.40005, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4884227920111392960}
@@ -7885,7 +7885,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.90565056, z: -0, w: -0.424025}
   m_LocalPosition: {x: 0.21, y: 0, z: 1.487}
-  m_LocalScale: {x: 0.3, y: 0.4, z: 0.8}
+  m_LocalScale: {x: 0.3, y: 0.400008, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4884227920111392960}
