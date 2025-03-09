@@ -1,4 +1,5 @@
 using System;
+using Gate;
 using Manager;
 using Proyecto.Utilities;
 using UnityEngine;
@@ -10,22 +11,20 @@ namespace Proyecto.Controller
     {
         #region Inspector Variables
 
-        [FormerlySerializedAs("MoveSpeed")]
-        [Header("Move")]
-        [SerializeField] private float moveSpeed;
-        [FormerlySerializedAs("LimitMove")] [SerializeField] private float limitMove;
-        
+        [SerializeField] private bool debugPlayer;
 
-        [FormerlySerializedAs("RotationSpeed")]
-        [Header("Rotation")] 
-        [SerializeField] private float rotationSpeed;
-        [FormerlySerializedAs("LimitRotation")] [SerializeField] private float limitRotation;
+        [Header("Move")] [SerializeField] private float moveSpeed;
+        [SerializeField] private float limitMove;
+
+        [Header("Rotation")] [SerializeField] private float rotationSpeed;
+        [SerializeField] private float limitRotation;
 
         #endregion
 
         #region Public Variables
+
         public bool IsJaulaUp { private get; set; }
-        
+
         #endregion
 
         #region Private Variables
@@ -33,22 +32,26 @@ namespace Proyecto.Controller
         private float _rotationY;
         private float _rotationX;
         private Rigidbody _rb;
+        private CapsuleCollider _capsuleCollider;
         private Vector3 _startPosition;
 
         #endregion
 
         #region Unity Methods
-        
+
         private void Start()
         {
-            _rotationY = 0;
             Cursor.lockState = CursorLockMode.Locked;
-            IsJaulaUp = true;
+            _rotationY = 0;
+            IsJaulaUp = !debugPlayer;
+            _rb = GetComponent<Rigidbody>();
+            _capsuleCollider = GetComponent<CapsuleCollider>();
+            _rb.useGravity = debugPlayer;
         }
 
         private void Update()
         {
-            if(UIManager.Instance.Paused) return;
+            if (UIManager.Instance.Paused) return;
             CalculateRotation();
             CalculateMove();
         }
@@ -60,19 +63,21 @@ namespace Proyecto.Controller
         public void SetStartPositionAndRotation(Vector3 position)
         {
             transform.SetPosition(position);
-            var direction = - transform.position;
+            var direction = -transform.position;
             direction.y = 0;
             transform.SetRotation(Quaternion.LookRotation(direction));
             _startPosition = position;
-            // transform.LookAt(Vector3.zero);
-            // transform.SetRotationX(0);
-            // transform.SetRotationZ(0);
         }
 
+        public void SetBiggerCapsuleColliderRadius()
+        {
+            _capsuleCollider.radius = 0.8f;
+        }
+        
         #endregion
-        
+
         #region Private Methods
-        
+
         private void CalculateRotation()
         {
             _rotationY += -Input.GetAxis("Mouse Y") * rotationSpeed;
@@ -90,24 +95,15 @@ namespace Proyecto.Controller
             transform.position += transform.forward * (v * moveSpeed * Time.deltaTime);
             transform.position += Quaternion.AngleAxis(90, Vector3.up) * transform.forward *
                                   (h * moveSpeed * Time.deltaTime);
-            if(IsJaulaUp) calculateLimits();
+            if (IsJaulaUp) CalculateLimits();
+        }
+
+        private void CalculateLimits()
+        {
+            transform.LimitZ(_startPosition.z - limitMove, _startPosition.z + limitMove);
+            transform.LimitX(_startPosition.x - limitMove, _startPosition.x + limitMove);
         }
         
-        private void calculateLimits()
-        {
-            transform.LimitZ(_startPosition.z-limitMove, _startPosition.z+limitMove);
-            transform.LimitX(_startPosition.x-limitMove, _startPosition.x+limitMove);
-        }
-
         #endregion
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("KillZone"))
-            { 
-                UIManager.Instance.ShowEndPanel();
-            }
-        }
     }
-    
 }

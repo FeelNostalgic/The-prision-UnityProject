@@ -112,7 +112,11 @@ namespace Arrow
                 {
                     SpinIsCompleted = true;
                     if (!npcJail.IsPlayer) npcJail.NPC.GetComponent<NPC_IA>().enabled = true;
-                    else FirstPersonController.Instance.IsJaulaUp = false;
+                    else
+                    {
+                        FirstPersonController.Instance.IsJaulaUp = false;
+                        FirstPersonController.Instance.SetBiggerCapsuleColliderRadius();
+                    }
                 })
                 .OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.HydraulicSound))
                 .Play();

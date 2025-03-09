@@ -1,11 +1,12 @@
 using System;
 using DG.Tweening;
+using Proyecto.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Manager
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : Singlenton<GameManager>
     {
         #region Inspector Variables
 
@@ -18,6 +19,7 @@ namespace Manager
 
         private void Start()
         {
+            if(controlsPanel == null) return;
             controlsPanel.SetActive(false);
             Time.timeScale = 1;
         }
@@ -49,13 +51,7 @@ namespace Manager
 
             controlsPanel.SetActive(false);
         }
-
-        public void ExitToMainMenu()
-        {
-            ClickSound();
-            MySceneManager.LoadScene(MySceneManager.Scenes.MainMenu);
-        }
-
+        
         public void ExitGame()
         {
             ClickSound();
@@ -65,7 +61,7 @@ namespace Manager
 			Application.Quit();
 #endif
         }
-
+        
         #endregion
 
         #region Private Methods

@@ -76,8 +76,25 @@ namespace Manager
 
         public void PauseClip(bool isPaused)
         {
-            if(isPaused) mainAudioSource.Pause();
-            else mainAudioSource.UnPause();
+            if (isPaused)
+            {
+                sfxAudioSource.Pause();
+                sfxDoorAudioSource.Pause();
+                mainAudioSource.Pause();
+            }
+            else
+            {
+                sfxAudioSource.UnPause();
+                sfxDoorAudioSource.UnPause();
+                mainAudioSource.UnPause();
+            }
+        }
+
+        public void StopAudio()
+        {
+            sfxAudioSource.Stop();
+            sfxDoorAudioSource.Stop();
+            mainAudioSource.Stop();
         }
         
         #endregion

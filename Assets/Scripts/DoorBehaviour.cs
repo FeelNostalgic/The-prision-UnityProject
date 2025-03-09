@@ -1,45 +1,68 @@
 using System;
 using DG.Tweening;
 using Manager;
-using Proyecto.Manager;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Proyecto.Behaviour
+namespace Door
 {
     public class DoorBehaviour : MonoBehaviour
     {
         #region Inspector Variables
 
-        [SerializeField] private GameObject DoorPositiveX;
-        [SerializeField] private GameObject DoorNegativeX;
+        [SerializeField] private GameObject doorPositiveX;
+        [SerializeField] private GameObject doorNegativeX;
 
         #endregion
 
-        private void OnTriggerEnter(Collider other)
-        {
-            Sequence sq = DOTween.Sequence();
-            sq.Append(DoorPositiveX.transform.DOLocalMoveX(1.6f,
-                        1)
-                    .SetEase(Ease.Linear));
-            sq.Join( DoorNegativeX.transform.DOLocalMoveX(-1.6f,
-                        1)
-                    .SetEase(Ease.Linear));
+        #region private Variables
 
-            sq.Play().OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.DoorSoundOpen));
+        private Sequence _openSequence;
+        private Sequence _closeSequence;
+
+        #endregion
+
+        #region Unity Methods
+
+        private void Start()
+        {
+            BuildCloseSequence();
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            BuildStartSequence();
+
+            if (_closeSequence.IsActive())
+            {
+                _closeSequence.Kill();
+            }
+            
+            _openSequence.Play();
+        }
+        
         private void OnTriggerExit(Collider other)
         {
-            Sequence sq = DOTween.Sequence();
-            sq.Append(DoorPositiveX.transform.DOLocalMoveX(0.5f,
-                    1)
-                .SetEase(Ease.Linear));
-            sq.Join(DoorNegativeX.transform.DOLocalMoveX(-0.5f,
-                        1)
-                    .SetEase(Ease.Linear));
+            BuildCloseSequence();
+            _closeSequence.Play();
+        }
+        
+        #endregion
 
-            sq.Play().OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.DoorSoundClose));
+        private void BuildStartSequence()
+        {
+            _openSequence = DOTween.Sequence();
+            _openSequence.Append(doorPositiveX.transform.DOLocalMoveX(1.6f, 1).SetEase(Ease.Linear))
+                .Join(doorNegativeX.transform.DOLocalMoveX(-1.6f, 1).SetEase(Ease.Linear))
+                .OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.DoorSoundOpen));
+        }
 
+        private void BuildCloseSequence()
+        {
+            _closeSequence = DOTween.Sequence();
+            _closeSequence.Append(doorPositiveX.transform.DOLocalMoveX(0.5f, 1).SetEase(Ease.Linear))
+                .Join(doorNegativeX.transform.DOLocalMoveX(-0.5f, 1).SetEase(Ease.Linear))
+                .OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.DoorSoundClose));
         }
     }
 }
