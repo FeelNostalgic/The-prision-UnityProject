@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Manager;
@@ -15,10 +16,8 @@ namespace Proyecto.Behaviour
     {
         #region Inspector Variables
 
-        [FormerlySerializedAs("SpinDuration")] [SerializeField] private float spinDuration;
-
-        [FormerlySerializedAs("JailsList")] [SerializeField] private List<GameObject> jailsList;
-
+        [SerializeField] private float spinDuration;
+        
         #endregion
 
         #region Public Variables
@@ -32,7 +31,8 @@ namespace Proyecto.Behaviour
         private int _currentNPCs;
         private float _pieceAngle;
         private float _halfPieceAngle;
-        private int _index;
+
+        private const int NPC_COUNT = 8;
 
         #endregion
 
@@ -41,10 +41,10 @@ namespace Proyecto.Behaviour
         private void Awake()
         {
             _currentNPCs = 0;
-            _pieceAngle = 360f / 8;
+            _pieceAngle = 360f / NPC_COUNT;
             _halfPieceAngle = _pieceAngle / 2;
         }
-
+        
         #endregion
 
         #region Public Methods
@@ -54,7 +54,7 @@ namespace Proyecto.Behaviour
             SpinIsCompleted = false;
             var npc = GetIndexOfSpin();
 
-            var targetAngle = _index * _pieceAngle;
+            var targetAngle = npc.Index * _pieceAngle;
             var rightOffset = (targetAngle + _halfPieceAngle) % 360;
             var leftOffset = (targetAngle - _halfPieceAngle) % 360;
 
@@ -86,9 +86,8 @@ namespace Proyecto.Behaviour
                 })
                 .OnComplete(() =>
                 {
-                    Debug.Log(_index + ": Completed");
-                    if(npc != null) JailDown(npc);
-                    else JailDown();
+                    Debug.Log(npc.Index + ": Completed");
+                    JailDown(npc);
                 })
                 .Play();
         }
@@ -96,30 +95,23 @@ namespace Proyecto.Behaviour
         #endregion
 
         #region Private Methods
-        private NPC_Position GetIndexOfSpin()
+        private NPCJailPosition GetIndexOfSpin()
         {
-            if (_currentNPCs < 7)
-            {
-                var target = SetupManager.Instance.GetNextNPC();
-                _index = target.Index;
-                _currentNPCs++;
-                return target;
-            }
-            else
-            {
-                _index = SetupManager.Instance.PlayerIndex;
-                return null;
-            }
+            if (_currentNPCs >= 7) return SetupManager.Instance.PlayerPosition;
+            
+            var target = SetupManager.Instance.GetNextNPC();
+            _currentNPCs++;
+            return target;
         }
         
-        private void JailDown(NPC_Position npc = null)
+        private void JailDown(NPCJailPosition npcJail)
         {
-            jailsList[_index].transform
+            npcJail.Jail
                 .DOMoveY(-2.55f, AudioManager.Instance.GetClipDuration(AudioManager.SFX_Type.HydraulicSound))
                 .OnComplete(() =>
                 {
                     SpinIsCompleted = true;
-                    if (npc != null) npc.NPC.GetComponent<NPC_IA>().enabled = true;
+                    if (!npcJail.IsPlayer) npcJail.NPC.GetComponent<NPC_IA>().enabled = true;
                     else FirstPersonController.Instance.IsJaulaUp = false;
                 })
                 .OnPlay(() => AudioManager.Instance.PlayClip(AudioManager.SFX_Type.HydraulicSound))

@@ -7,14 +7,6 @@ namespace Proyecto.IA
 {
     public class NPC_IA : MonoBehaviour
     {
-        #region Inspector Variables
-        
-        #endregion
-
-        #region Public Variables
-
-        #endregion
-
         #region Private Variables
 
         private NavMeshAgent _navMeshAgent;
@@ -22,6 +14,11 @@ namespace Proyecto.IA
         #endregion
 
         #region Unity Methods
+
+        private void OnEnable()
+        {
+            _navMeshAgent.enabled = true;
+        }
 
         private void Awake()
         {
@@ -31,7 +28,7 @@ namespace Proyecto.IA
         private void Start()
         {
             _navMeshAgent.speed = IAManager.Instance.Speed;
-            _navMeshAgent.SetDestination(IAManager.Instance.getRandomSalaPoint());
+            _navMeshAgent.SetDestination(IAManager.Instance.getRandomRoomPoint());
         }
 
         private void Update()
@@ -41,14 +38,6 @@ namespace Proyecto.IA
                 Destroy(gameObject);
             }
         }
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods
 
         #endregion
     }

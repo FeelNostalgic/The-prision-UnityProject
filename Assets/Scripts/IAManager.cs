@@ -31,7 +31,7 @@ namespace Proyecto.Manager
 
         #region Public Methods
 
-        public Vector3 getRandomSalaPoint()
+        public Vector3 getRandomRoomPoint()
         {
             return SalaPoints[Random.Range(0, SalaPoints.Count)].position;
         }

@@ -2,6 +2,7 @@ using System;
 using Manager;
 using Proyecto.Utilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Proyecto.Controller
 {
@@ -9,13 +10,16 @@ namespace Proyecto.Controller
     {
         #region Inspector Variables
 
+        [FormerlySerializedAs("MoveSpeed")]
         [Header("Move")]
-        [SerializeField] private float MoveSpeed;
-        [SerializeField] private float LimitMove;
+        [SerializeField] private float moveSpeed;
+        [FormerlySerializedAs("LimitMove")] [SerializeField] private float limitMove;
         
 
-        [Header("Rotation")] [SerializeField] private float RotationSpeed;
-        [SerializeField] private float LimitRotation;
+        [FormerlySerializedAs("RotationSpeed")]
+        [Header("Rotation")] 
+        [SerializeField] private float rotationSpeed;
+        [FormerlySerializedAs("LimitRotation")] [SerializeField] private float limitRotation;
 
         #endregion
 
@@ -26,22 +30,20 @@ namespace Proyecto.Controller
 
         #region Private Variables
 
-        private float _RotationY;
-        private float _RotationX;
+        private float _rotationY;
+        private float _rotationX;
         private Rigidbody _rb;
         private Vector3 _startPosition;
 
         #endregion
 
         #region Unity Methods
-
-        private void Awake()
+        
+        private void Start()
         {
-            _RotationY = 0;
+            _rotationY = 0;
             Cursor.lockState = CursorLockMode.Locked;
             IsJaulaUp = true;
-            _startPosition = transform.position;
-            //_rb = GetComponent<Rigidbody>();
         }
 
         private void Update()
@@ -52,15 +54,31 @@ namespace Proyecto.Controller
         }
 
         #endregion
+
+        #region Public Methods
+
+        public void SetStartPositionAndRotation(Vector3 position)
+        {
+            transform.SetPosition(position);
+            var direction = - transform.position;
+            direction.y = 0;
+            transform.SetRotation(Quaternion.LookRotation(direction));
+            _startPosition = position;
+            // transform.LookAt(Vector3.zero);
+            // transform.SetRotationX(0);
+            // transform.SetRotationZ(0);
+        }
+
+        #endregion
         
         #region Private Methods
         
         private void CalculateRotation()
         {
-            _RotationY += -Input.GetAxis("Mouse Y") * RotationSpeed;
-            var rotationX = Input.GetAxis("Mouse X") * RotationSpeed;
-            _RotationY = Mathf.Clamp(_RotationY, -LimitRotation, LimitRotation);
-            Camera.main.transform.localRotation = Quaternion.Euler(_RotationY, 0, 0);
+            _rotationY += -Input.GetAxis("Mouse Y") * rotationSpeed;
+            var rotationX = Input.GetAxis("Mouse X") * rotationSpeed;
+            _rotationY = Mathf.Clamp(_rotationY, -limitRotation, limitRotation);
+            Camera.main.transform.localRotation = Quaternion.Euler(_rotationY, 0, 0);
             transform.rotation *= Quaternion.Euler(0, rotationX, 0);
         }
 
@@ -69,16 +87,16 @@ namespace Proyecto.Controller
             var h = Input.GetAxis("Horizontal");
             var v = Input.GetAxis("Vertical");
 
-            transform.position += transform.forward * (v * MoveSpeed * Time.deltaTime);
+            transform.position += transform.forward * (v * moveSpeed * Time.deltaTime);
             transform.position += Quaternion.AngleAxis(90, Vector3.up) * transform.forward *
-                                  (h * MoveSpeed * Time.deltaTime);
+                                  (h * moveSpeed * Time.deltaTime);
             if(IsJaulaUp) calculateLimits();
         }
         
         private void calculateLimits()
         {
-            transform.LimitZ(_startPosition.z-LimitMove, _startPosition.z+LimitMove);
-            transform.LimitX(_startPosition.x-LimitMove, _startPosition.x+LimitMove);
+            transform.LimitZ(_startPosition.z-limitMove, _startPosition.z+limitMove);
+            transform.LimitX(_startPosition.x-limitMove, _startPosition.x+limitMove);
         }
 
         #endregion

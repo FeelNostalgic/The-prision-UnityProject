@@ -31,10 +31,7 @@ namespace Manager
         {
             pausePanel!.SetActive(false);
             //endPanel!.SetActive(false);
-        }
-
-        private void Start()
-        {
+            
             blackScreen.DOFade(0f, 1.5f).SetEase(Ease.InSine)
                 .OnPlay(() =>
                 {
@@ -48,7 +45,7 @@ namespace Manager
                 })
                 .Play();
         }
-
+        
         private void Update()
         {
             if (!Started) return;
