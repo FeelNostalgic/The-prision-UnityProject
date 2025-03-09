@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-namespace Proyecto.Behaviour
+namespace Arrow
 {
     public class ArrowBehaviour : Singlenton<ArrowBehaviour>
     {
