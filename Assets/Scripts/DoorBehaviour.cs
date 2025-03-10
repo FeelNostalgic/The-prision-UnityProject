@@ -1,8 +1,6 @@
-using System;
 using DG.Tweening;
 using Manager;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Door
 {

@@ -1,4 +1,3 @@
-using System;
 using Proyecto.Manager;
 using UnityEngine;
 using UnityEngine.AI;

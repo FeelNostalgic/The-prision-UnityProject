@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
 using DG.Tweening;
 using Manager;
 using Proyecto.Controller;
 using Proyecto.IA;
-using Proyecto.Manager;
 using Proyecto.Utilities;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Arrow

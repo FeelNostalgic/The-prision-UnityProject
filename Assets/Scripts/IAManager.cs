@@ -21,24 +21,12 @@ namespace Proyecto.Manager
 
         #endregion
 
-        #region Private Variables
-
-        #endregion
-
-        #region Unity Methods
-
-        #endregion
-
         #region Public Methods
 
         public Vector3 getRandomRoomPoint()
         {
             return SalaPoints[Random.Range(0, SalaPoints.Count)].position;
         }
-        #endregion
-
-        #region Private Methods
-
         #endregion
     }
 }

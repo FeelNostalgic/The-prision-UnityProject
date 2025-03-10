@@ -1,7 +1,4 @@
-
-using System;
 using DG.Tweening;
-using Manager;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,10 +6,6 @@ namespace Arrow
 { 
 	public class ArrowRotation : MonoBehaviour
 	{
-		#region Public Variables
-		
-		#endregion
-
 		#region Private Variables
 
 		private const int SPIN_DURATION = 4;

@@ -1,7 +1,5 @@
-using System;
 using DG.Tweening;
 using Proyecto.Controller;
-using Proyecto.Manager;
 using Proyecto.Utilities;
 using UnityEngine;
 using UnityEngine.UI;

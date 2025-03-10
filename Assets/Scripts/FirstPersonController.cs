@@ -1,9 +1,6 @@
-using System;
-using Gate;
 using Manager;
 using Proyecto.Utilities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Proyecto.Controller
 {
